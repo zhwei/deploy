@@ -3,32 +3,44 @@
 
 import json
 
-from flask import Flask, request, render_template
+from flask import Flask
+from flask import render_template, request, redirect
 
-from libs.github import GitHub
-from libs.dataobject import DataObject
+import configs
+from libs import utils
+from libs.events import Events
+
 
 app = Flask(__name__)
+app.debug = configs.debug
+
+
+@app.context_processor
+def pulls():
+    return dict(pulls=utils.get_pulls())
 
 
 @app.route("/")
 def index():
+    return render_template("index.html")
 
-    pulls_data = DataObject("pulls")
-    if not pulls_data.all():
-        github = GitHub()
-        pulls = github.get_pull_requests("all")
-        pulls_data.init(pulls)
 
-    return render_template("index.html", pulls=pulls_data.all())
+@app.route("/roll", methods=["GET", "POST"])
+def rollback():
+    version = request.args.get("version")
+    if request.method == "POST":
+        event = Events("rollback", None)
+        event.rollback(version)
+        return redirect("/")
+
+    return render_template("roll.html", version=version)
 
 
 @app.route('/github/webhook', methods=["POST", ])
 def web_hook():
-
     event = request.headers.get("X-Github-Event")  # push, ...
     deliver = json.loads(request.data.decode())
-    return ""
+    return "hello"
 
 
 if __name__ == '__main__':

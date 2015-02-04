@@ -3,6 +3,8 @@
 from collections import defaultdict
 
 class DataObject(object):
+    """ Cache Data
+    """
 
     __data = defaultdict(list)
     limit = 30

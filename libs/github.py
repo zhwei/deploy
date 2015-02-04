@@ -5,6 +5,7 @@ import json
 import requests
 
 from configs import github_token
+from libs.dataobject import DataObject
 
 
 URL_BASE = "https://api.github.com/repos/baixing/che/"
