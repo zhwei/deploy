@@ -39,5 +39,12 @@ def checkout(version):
 
 def rollback(version):
     service("stop")
-    checkout(version)
+    with cd(project_root):
+        checkout(version)
     service("start")
+
+
+def stop():
+    run("killall git")
+    service("restart")
+    # run("...")

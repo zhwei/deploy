@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}日志{% endblock %}
+{% block content %}
+    <div class="row marketing">
+        <pre class="pre-scrollable" style="min-height: 460px;"></pre>
+        <button class="btn btn-default btn-block refresh">刷新</button>
+    </div>
+{% endblock %}
+
+{% block foot %}
+    <script>
+        var reloadLog = function () {
+            $.get('/ajax/log', function (ret) {
+                var elem = $('.pre-scrollable');
+                elem.html(ret);
+                elem.scrollTop(elem[0].scrollHeight);
+            });
+        };
+        $(document).ready(function () {
+            reloadLog();
+            $(".refresh").click(function () { reloadLog(); });
+        })
+    </script>
+{% endblock %}

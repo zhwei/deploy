@@ -3,16 +3,24 @@
 
 from libs import fab
 from configs import hosts
+from libs.worker import worker_instance
+
 
 class Events(object):
     """ PUSH事件
 
     粗略：记录当前版本号 -> 更新代码 -> 重启相关服务
     """
-
-    def __init__(self, event, deliver_data=None):
+    def __init__(self, event, deliver_data=None, auto_run=True, *args, **kwargs):
         self.event = event
         self.deliver_data = deliver_data or {}
+        if auto_run:
+            self.thread_run(event)
+
+    def thread_run(self, func, *args, **kwargs):
+        if not callable(func):
+            func = getattr(self, func)
+        worker_instance.run(func, *args, **kwargs)
 
     def push(self):
         """ push事件
@@ -32,8 +40,3 @@ class Events(object):
         for host in hosts:
             with fab.with_host(host):
                 fab.rollback(version)
-
-
-
-e = Events('push', {})
-e.push()

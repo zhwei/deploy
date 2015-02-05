@@ -13,7 +13,7 @@ LEVELS = {
     'critical': logging.CRITICAL,
 }
 
-def get_logger(log_name, display_level="info"):
+def get_logger(log_name, display_level="debug"):
     logger = logging.getLogger(log_name)
 
     if not logger.handlers:
@@ -21,13 +21,11 @@ def get_logger(log_name, display_level="info"):
         logger.setLevel(level)
         logger.propagate = 0
 
-        # log_file_name = '/home/deploy/{}.log'.format(log_name)
-        log_file_name = '{}.log'.format(log_name)
+        log_file_name = '/tmp/{}.log'.format(log_name)
         file_handler = logging.handlers.RotatingFileHandler(
             log_file_name, maxBytes=1000000, backupCount=50)
 
-        # 2011-08-31 19:18:29,816-INFO-message
-        formatter = logging.Formatter('[%(asctime)s-%(levelname)s] %(message)s')
+        formatter = logging.Formatter('[%(asctime)s] %(message)s')
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 

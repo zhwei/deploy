@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}RollBack{% endblock %}
 {% block content %}
-    <div class="header">
-        <nav>
-            <ul class="nav nav-pills pull-right">
-                <li role="presentation"><a href="/">首页</a></li>
-            </ul>
-        </nav>
-        <h3 class="text-muted text-danger">Roll</h3>
-    </div>
     <div class="row marketing">
     {% if not version %}
         <form method="GET" role="form">
@@ -32,7 +24,7 @@
         <form method="post" role="form">
             <p>
                 <span>确定要回滚到: </span>
-                <input type="text" name="version" id="version" class="form-control" value="{{ version }}"/>
+                <input type="text" name="version" id="version" class="form-control" value="{{ version }}" disabled/>
             </p>
             <p>
                 <input type="submit" class="btn btn-danger" value="确定"/>
