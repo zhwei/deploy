@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}项目 - {{ project['name'] }}{% endblock %}
+{% block content %}
+    <h4>{{ project['name'] }}<h4>
+    <hr>
+    <div class="row marketing">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Function</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for function in project.get('functions', []) %}
+                <tr>
+                    <td>{{ function }}</td>
+                    <td><span class="label label-info">state</span></td>
+                    <td><span class="label label-info">state</span></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

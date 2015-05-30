@@ -5,27 +5,15 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>标题</th>
-                <th>提交者</th>
-                <th>状态</th>
+                <th>Project Name</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
-            {% for pull in pulls %}
+            {% for project in projects %}
                 <tr>
-                    <td>{{ pull['number'] }}</td>
-                    <td><a href="{{ pull['_links']['html']['href'] }}" target="_blank">{{ pull['title'] }}</a></td>
-                    <td><a href="{{ pull['user']['html_url'] }}" target="_blank">{{ pull['user']['login'] }}</a></td>
-                    <td>
-                        {% if pull['state'] == 'closed' %}
-                            <span class="label label-default">closed</span>
-                        {% elif pull['open'] == 'open' %}
-                            <span class="label label-primary">open</span>
-                        {% else %}
-                            <span class="label label-info">{{ pull['state'] }}</span>
-                        {% endif %}
-                    </td>
+                  <td><a href="/p/{{ project }}">{{ project }}</a></td>
+                  <td><span class="label label-info">state</span></td>
                 </tr>
             {% endfor %}
             </tbody>

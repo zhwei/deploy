@@ -17,6 +17,7 @@
     <div class="header">
         <nav>
             <ul class="nav nav-pills pull-right">
+                <li role="presentation"><a href="/">首页</a></li>
                 <li role="presentation"><a href="/pull">手动部署</a></li>
                 <li role="presentation"><a class="text-danger" href="/roll">RollBack</a></li>
                 <li role="presentation"><a href="/log">部署日志</a></li>
@@ -24,6 +25,11 @@
         </nav>
         <h3 class="text-muted">部署系统</h3>
     </div>
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="alert alert-{{ msg[0] }}" role="alert">{{ msg[1] }}<div>
+        {% endfor %}
+    {% endif %}
     {% block content %}
     {% endblock %}
     <footer class="footer">
@@ -33,8 +39,6 @@
         </p>
     </footer>
 </div>
-
 {% block foot %}{% endblock %}
-
 </body>
 </html>

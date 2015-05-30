@@ -34,3 +34,6 @@ def get_logger(log_name, display_level="debug"):
         logger.addHandler(screen_handler)
 
     return logger.info
+
+
+deploy_log = get_logger("Deploy")

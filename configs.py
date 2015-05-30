@@ -15,5 +15,9 @@ project_root = "/home/zhwei/che"
 
 # GitHub
 
-github_token = "5f71e7ee1df8854838b9cdec3cf8760d59f4ac2e"  # bxbot's token
-# github_token = "ac593eaad9c5104408ae96e5b3b20fac43ccfe52"  # zhwei's token
+# github_token = "5f71e7ee1df8854838b9cdec3cf8760d59f4ac2e"  # bxbot's token
+github_token = "ac593eaad9c5104408ae96e5b3b20fac43ccfe52"  # zhwei's token
+
+
+PROJECT_HOME = './projects/'
+TEMP_PATH = '/tmp/'
