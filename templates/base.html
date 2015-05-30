@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    {# <link rel="icon" href="/static/favicon.ico"> #}
-    <title>部署系统 - {% block title %}{% endblock %}</title>
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Fabric Worker - {% block title %}{% endblock %}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/jumbotron-narrow.css" rel="stylesheet">
     <script src="/static/js/jquery-2.1.3.min.js"></script>
@@ -17,25 +17,26 @@
     <div class="header">
         <nav>
             <ul class="nav nav-pills pull-right">
-                <li role="presentation"><a href="/">首页</a></li>
-                <li role="presentation"><a href="/pull">手动部署</a></li>
-                <li role="presentation"><a class="text-danger" href="/roll">RollBack</a></li>
-                <li role="presentation"><a href="/log">部署日志</a></li>
+                <li role="presentation"><a href="/">Index</a></li>
             </ul>
         </nav>
-        <h3 class="text-muted">部署系统</h3>
+        <h3 class="text-muted">Fabric Worker</h3>
     </div>
-    {% if messages %}
-        {% for msg in messages %}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <li>{{ message }}</li>
             <div class="alert alert-{{ msg[0] }}" role="alert">{{ msg[1] }}<div>
         {% endfor %}
-    {% endif %}
+      {% endif %}
+    {% endwith %}
+
     {% block content %}
     {% endblock %}
     <footer class="footer">
         <p class="text-center">
-            <a href="mailto:zhangwei@baixing.net">zhwei</a>
-            &copy; Baixing 2015
+            &copy; <a href="https://github.com/zhwei" target="_blank">zhwei</a>
         </p>
     </footer>
 </div>

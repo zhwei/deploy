@@ -3,21 +3,10 @@
 debug = True
 
 
-# deploy info
-
-hosts = [
-    "root@192.168.2.38",
-    # "root@crawler01.netpupil.cn",
-    ]
-
-project_root = "/home/zhwei/che"
+import os
+ROOT = os.path.abspath(__file__).rsplit('/', 1)[0]
+get_path = lambda x: os.path.join(ROOT, x)
 
 
-# GitHub
-
-# github_token = "5f71e7ee1df8854838b9cdec3cf8760d59f4ac2e"  # bxbot's token
-github_token = "ac593eaad9c5104408ae96e5b3b20fac43ccfe52"  # zhwei's token
-
-
-PROJECT_HOME = './projects/'
+PROJECTS_HOME = get_path('projects')
 TEMP_PATH = '/tmp/'

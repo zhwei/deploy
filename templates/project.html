@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% block title %}项目 - {{ project['name'] }}{% endblock %}
+
+{% set project_name = project['name'] %}
+
 {% block content %}
-    <h4>{{ project['name'] }}<h4>
+    <h4>{{ project_name }}</h4>
     <hr>
     <div class="row marketing">
         <table class="table table-hover">
@@ -15,9 +18,22 @@
             <tbody>
             {% for function in project.get('functions', []) %}
                 <tr>
-                    <td>{{ function }}</td>
-                    <td><span class="label label-info">state</span></td>
-                    <td><span class="label label-info">state</span></td>
+                    <td><strong>{{ function }}</strong></td>
+                    {% if lock_status(project_name, function) %}
+                        <td>
+                            <span class="label label-danger">Runing</span>
+                        </td>
+                        <td>
+                            <a href="/task/stop/{{ project_name }}/{{ function }}" class="btn btn-danger btn-sm">Sop</a>
+                        </td>
+                    {% else %}
+                        <td>
+                            <span class="label label-success">Free</span>
+                        </td>
+                        <td>
+                            <a href="/task/run/{{ project_name }}/{{ function }}" class="btn btn-sm btn-success">Run</a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
