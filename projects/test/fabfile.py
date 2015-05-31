@@ -22,7 +22,8 @@ def init():
     # run('ls')
     import time
     start = time.time()
-    while start < time.time() + 1000:
+    s = start + 5
+    while start < s:
         print(start)
         start += 1
         time.sleep(1)

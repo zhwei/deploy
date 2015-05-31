@@ -17,19 +17,20 @@
     <div class="header">
         <nav>
             <ul class="nav nav-pills pull-right">
-                <li role="presentation"><a href="/">Index</a></li>
+                <li role="presentation"><a href="/">Home</a></li>
             </ul>
         </nav>
         <h3 class="text-muted">Fabric Worker</h3>
     </div>
 
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <li>{{ message }}</li>
-            <div class="alert alert-{{ msg[0] }}" role="alert">{{ msg[1] }}<div>
-        {% endfor %}
-      {% endif %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endwith %}
 
     {% block content %}
@@ -40,6 +41,8 @@
         </p>
     </footer>
 </div>
+<script src="/static/js/action.js"></script>
+<script src="/static/js/site.js"></script>
 {% block foot %}{% endblock %}
 </body>
 </html>

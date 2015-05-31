@@ -1,24 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}日志{% endblock %}
+{% block title %}{{ project }}.{{ function }} - Log{% endblock %}
 {% block content %}
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li>Project：<a href="/p/{{ project }}">{{ project }}</a></li>
+        <li>Function：{{ function }}</li>
+    </ol>
+    <hr/>
     <div class="row marketing">
-        <pre class="pre-scrollable" style="min-height: 460px;"></pre>
-        <button class="btn btn-default btn-block refresh">刷新</button>
+        <pre class="pre-scrollable" id="log" style="min-height: 460px;"></pre>
+        <p>
+            <a class="btn btn-default" href="/log/{{ project }}/{{ function }}?raw=true">New Tab</a>
+            {% if lock_status(project, function) %}
+            <a class="btn btn-danger" href="/task/stop/{{ project }}/{{ function }}">Stop</a>
+            {% else %}
+            <a class="btn btn-success" href="/task/run/{{ project }}/{{ function }}">Start</a>
+            {% endif %}
+        </p>
     </div>
 {% endblock %}
 
 {% block foot %}
     <script>
         var reloadLog = function () {
-            $.get('/log?ajax=true', function (ret) {
+            $.get('/log/{{ project }}/{{ function }}?ajax=true', function (ret) {
                 var elem = $('.pre-scrollable');
                 elem.html(ret);
                 elem.scrollTop(elem[0].scrollHeight);
             });
+            setTimeout(reloadLog, 1000)
         };
-        $(document).ready(function () {
-            reloadLog();
-            $(".refresh").click(function () { reloadLog(); });
-        })
+        $(document).ready(reloadLog);
     </script>
 {% endblock %}

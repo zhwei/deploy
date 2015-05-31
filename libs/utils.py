@@ -1,7 +1,7 @@
 # Created by zhangwei@baixing.net on 2015-02-04 13:26
 
 import os
-import importlib
+import imp
 
 import configs
 
@@ -41,13 +41,14 @@ def get_lock(project, function):
 
 
 def get_lock_status(project, function):
-    """ shotcut function """
+    """ shortcut function """
     return get_lock(project, function).status()
 
 
-def get_fab(project, function=None):
-    """ get fabric module or function """
-    fab = importlib.import_module('projects.{}.fabfile'.format(project))
+def import_fab(project, function=None):
+    """ import fabric module or function """
+    path = configs.PROJECTS_HOME + '/{}/fabfile.py'.format(project)
+    fab = imp.load_source('fabfile', path)
     if function:
         return getattr(fab, function, None)
     return fab
