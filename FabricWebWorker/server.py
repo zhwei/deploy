@@ -3,7 +3,6 @@
 import os
 
 import flask
-import tailer
 
 import configs
 from libs.task import Task

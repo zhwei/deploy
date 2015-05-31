@@ -6,7 +6,7 @@ from distutils.core import setup
 setup(
     name='fabric-web-worker',
     version='dev',
-    packages=['libs', 'test'],
+    packages=['FabricWebWorker', ],
     url='https://github.com/zhwei/fabric-web-worker',
     install_requires=[
         'Flask>=0.10.1',
