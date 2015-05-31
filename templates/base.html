@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/static/favicon.ico">
-    <title>Fabric Worker - {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - Fabric Web Worker</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/jumbotron-narrow.css" rel="stylesheet">
     <script src="/static/js/jquery-2.1.3.min.js"></script>
@@ -20,7 +19,7 @@
                 <li role="presentation"><a href="/">Home</a></li>
             </ul>
         </nav>
-        <h3 class="text-muted">Fabric Worker</h3>
+        <h3 class="text-muted">Fabric Web Worker</h3>
     </div>
 
     {% with messages = get_flashed_messages() %}
