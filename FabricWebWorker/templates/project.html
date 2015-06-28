@@ -1,12 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Project - {{ project['name'] }}{% endblock %}
+{% block title %}Project - {{ project }}{% endblock %}
 
-{% set project_name = project['name'] %}
+{% set project_name = project.name %}
 
 {% block content %}
     <ol class="breadcrumb">
         <li><a href="/">Home</a></li>
-        <li>Project：{{ project_name }}</li>
+        <li><a href="/p/{{ project.load_parent().path }}">{{ project.load_parent().path }}</a></li>
+        <li>{{ project.path }}</li>
     </ol>
     <hr>
     <div class="row marketing">
@@ -19,23 +20,27 @@
             </tr>
             </thead>
             <tbody>
-            {% for function in project.get('functions', []) %}
+            {% for child in project %}
                 <tr>
-                    <td><a href="/log/{{ project_name }}/{{ function }}">{{ function }}</a></td>
-                    {% if lock_status(project_name, function) %}
-                        <td>
-                            <span class="label label-danger">Runing</span>
-                        </td>
-                        <td>
-                            <a href="/task/stop/{{ project_name }}/{{ function }}" class="btn btn-danger btn-sm">Sop</a>
-                        </td>
+                    <td><a href="/{{ 'func' if child.type == itemType.Function else 'p' }}/{{ child.path }}">{{ child }}</a></td>
+                    {% if child.type == itemType.Function %}
+                        {% if lockStatus(child) %}
+                            <td>
+                                <span class="label label-danger">Runing</span>
+                            </td>
+                            <td>
+                                <a href="/task/stop/{{ child.path }}" class="btn btn-danger btn-sm">Sop</a>
+                            </td>
+                        {% else %}
+                            <td>
+                                <span class="label label-success">Free</span>
+                            </td>
+                            <td>
+                                <a href="/task/run/{{ child.path }}" class="btn btn-sm btn-success">Run</a>
+                            </td>
+                        {% endif %}
                     {% else %}
-                        <td>
-                            <span class="label label-success">Free</span>
-                        </td>
-                        <td>
-                            <a href="/task/run/{{ project_name }}/{{ function }}" class="btn btn-sm btn-success">Run</a>
-                        </td>
+                        <td></td><td></td>
                     {% endif %}
                 </tr>
             {% endfor %}

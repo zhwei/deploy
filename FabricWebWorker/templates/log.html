@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
-{% block title %}{{ project }}.{{ function }} - Log{% endblock %}
+{% block title %}{{ item.path }} - Log{% endblock %}
 {% block content %}
     <ol class="breadcrumb">
         <li><a href="/">Home</a></li>
-        <li>Project：<a href="/p/{{ project }}">{{ project }}</a></li>
-        <li>Function：{{ function }}</li>
+        <li><a href="/p/{{ item.load_parent().path }}">{{ item.load_parent().path }}</a></li>
+        <li>Function：{{ item.name }}</li>
     </ol>
     <hr/>
     <div class="row marketing">
         <pre class="pre-scrollable" id="log" style="min-height: 460px;"></pre>
         <p>
-            <a class="btn btn-default" href="/log/{{ project }}/{{ function }}?raw=true">New Tab</a>
-            {% if lock_status(project, function) %}
-            <a class="btn btn-danger" href="/task/stop/{{ project }}/{{ function }}">Stop</a>
+            <a class="btn btn-default" href="/func/{{ item.path }}?raw=true">New Tab</a>
+            {% if lockStatus(item) %}
+                <a class="btn btn-danger" href="/task/stop/{{ item.path }}">Stop</a>
             {% else %}
-            <a class="btn btn-success" href="/task/run/{{ project }}/{{ function }}">Start</a>
+                <a class="btn btn-success" href="/task/run/{{ item.path }}">Start</a>
             {% endif %}
         </p>
     </div>
@@ -23,12 +23,12 @@
 {% block foot %}
     <script>
         var reloadLog = function () {
-            $.get('/log/{{ project }}/{{ function }}?ajax=true', function (ret) {
+            $.get('/func/{{ item.path }}?ajax=true', function (ret) {
                 var elem = $('.pre-scrollable');
                 elem.html(ret);
                 elem.scrollTop(elem[0].scrollHeight);
             });
-            setTimeout(reloadLog, 1000)
+            {% if lockStatus(item) %}setTimeout(reloadLog, 1000);{% endif %}
         };
         $(document).ready(reloadLog);
     </script>

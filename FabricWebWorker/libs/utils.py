@@ -1,19 +1,79 @@
 # Created by zhangwei@baixing.net on 2015-02-04 13:26
 
+
 import os
-import imp
+import sys
+import time
 
-import configs
+import tailer
 
-LOCK_PATH = configs.TEMP_PATH + 'lock/'
-os.system('mkdir -p {}'.format(LOCK_PATH))
+
+TMP_PATH = '/tmp/FabricWebWorker/'
+if not os.path.isdir(TMP_PATH):
+    os.makedirs(TMP_PATH)
+
+
+class Logger(object):
+
+    bak_file_count = {}
+
+    def __init__(self, item):
+        self.terminal = sys.stdout
+        self.path = Logger._log_path(item)
+
+    def open_file(self):
+        return open(self.path, 'a' if os.path.isfile(self.path) else 'w')
+
+    def cur_time(self):
+        return time.strftime('%Y-%m-%d %H:%M:%S')
+
+    def write(self, message):
+        self.terminal.write(message)
+        message = message.strip('\n')
+        if not message:
+            return
+        with self.open_file() as fi:
+            fi.write('[{}] {}\n'.format(self.cur_time(), message))
+
+    def flush(self):
+        with self.open_file() as fi:
+            fi.write('Flush at {}\n'.format(self.cur_time()))
+
+    log = write
+
+    @staticmethod
+    def _log_path(item):
+        path = TMP_PATH + 'logs/'
+        if not os.path.isdir(path):
+            os.makedirs(path)
+
+        return path + item.unit_name
+
+    @staticmethod
+    def redirect_to_file(item):
+        sys.stdout = sys.stderr = Logger(item)
+
+    @staticmethod
+    def tail_log_file(item, lines=1000):
+        path = Logger._log_path(item)
+
+        if not os.path.isfile(path):
+            return 'No Log'
+
+        with open(path) as fi:
+            return '\n'.join(tailer.tail(fi, lines))
+
 
 class Lock(object):
     """ file lock """
 
-    def __init__(self, name):
-        self.name = name
-        self.lock_file = LOCK_PATH + str(self.name)
+    _dir = TMP_PATH + 'lock/'
+    if not os.path.isdir(_dir):
+        os.makedirs(_dir)
+
+    def __init__(self, item):
+        self.name = item.unit_name
+        self.lock_file = self._dir + str(self.name)
 
     def lock(self, msg='lock'):
         if os.path.isfile(self.lock_file):
@@ -34,27 +94,3 @@ class Lock(object):
             return False
         with open(self.lock_file) as fi:
             return fi.read()
-
-
-def get_lock(project, function):
-    return Lock('{}.{}'.format(project, function))
-
-
-def get_lock_status(project, function):
-    """ shortcut function """
-    return get_lock(project, function).status()
-
-
-def import_fab(project, function=None):
-    """ import fabric module or function """
-    path = configs.PROJECTS_HOME + '/{}/fabfile.py'.format(project)
-    fab = imp.load_source('fabfile', path)
-    if function:
-        return getattr(fab, function, None)
-    return fab
-
-
-def get_projects():
-    for i in os.listdir(configs.PROJECTS_HOME):
-        if i not in ('__init__.py', '__init__.pyc'):
-            yield i

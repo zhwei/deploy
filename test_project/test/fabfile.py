@@ -4,7 +4,7 @@
 from fabric.api import env, local, run, roles
 
 # env.hosts = ["zhwei@jp1.rpvhost.net",]
-actions = ['init', 'a']
+ALL = ['init', 'a']
 env.roledefs = {
     'test': ["zhwei@jp1.rpvhost.net",]
 }
