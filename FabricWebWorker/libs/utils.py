@@ -17,9 +17,10 @@ class Logger(object):
 
     bak_file_count = {}
 
-    def __init__(self, item):
+    def __init__(self, item, level='out'):
         self.terminal = sys.stdout
         self.path = Logger._log_path(item)
+        self.level = level
 
     def open_file(self):
         return open(self.path, 'a' if os.path.isfile(self.path) else 'w')
@@ -33,13 +34,15 @@ class Logger(object):
         if not message:
             return
         with self.open_file() as fi:
-            fi.write('[{}] {}\n'.format(self.cur_time(), message))
+            fi.write('[{}]{}: {}\n'.format(self.cur_time(), self.level, message))
 
     def flush(self):
-        with self.open_file() as fi:
-            fi.write('Flush at {}\n'.format(self.cur_time()))
+        pass
 
     log = write
+
+    def clear(self):
+        os.unlink(self.path)
 
     @staticmethod
     def _log_path(item):
@@ -51,7 +54,8 @@ class Logger(object):
 
     @staticmethod
     def redirect_to_file(item):
-        sys.stdout = sys.stderr = Logger(item)
+        sys.stdout = Logger(item)
+        sys.stderr = Logger(item, 'err')
 
     @staticmethod
     def tail_log_file(item, lines=1000):

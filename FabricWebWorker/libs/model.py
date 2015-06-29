@@ -71,6 +71,10 @@ class Task(object):
         lock.unlock()
         log.log('Task:: {} has been killed.'.format(item.unit_name))
 
+    @classmethod
+    def clear(cls, item):
+        utils.Logger(item).clear()
+
 
 class Item(object):
     class Type:

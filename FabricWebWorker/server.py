@@ -25,35 +25,44 @@ def index():
     return flask.render_template("index.html", projects=Item.get_projects())
 
 
-@app.route("/p/<path:path>")
-def project(path):
-    p = Item(path)
-    return flask.render_template('project.html', project=p)
-
-@app.route('/func/<path:path>')
-def function(path):
-    item = Item(path)
-
-    if flask.request.args.get('ajax', None):
-        return utils.Logger.tail_log_file(item)
-
-    if flask.request.args.get('raw', None):
-        template = 'log-raw.html'
-    else:
-        template = 'log.html'
-
-    return flask.render_template(template, item=item)
-
 @app.route('/task/<action>/<path:path>')
 def task(action, path):
     item = Item(path)
     if action == 'run':
-        Task.run(item)
+        args = flask.request.args.get('args', None)
+        if args:
+            Task.run(item, *args.split(','))
+        else:
+            Task.run(item)
         return flask.redirect('/func/{}'.format(path))
+
     elif action == 'stop':
         Task.stop(item)
 
+    elif action == 'clear':
+        Task.clear(item)
+
     return flask.redirect(flask.request.referrer or '/')
+
+
+
+@app.route("/<type>/<path:path>")
+def project(type, path):
+
+    item = Item(path)
+
+    if type == 'func':
+        if flask.request.args.get('ajax', None):
+            return utils.Logger.tail_log_file(item)
+
+        if flask.request.args.get('raw', None):
+            template = 'log-raw.html'
+        else:
+            template = 'log.html'
+    else:
+        template = 'project.html'
+
+    return flask.render_template(template, item=item)
 
 
 # parse args

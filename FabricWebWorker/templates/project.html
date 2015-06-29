@@ -1,13 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Project - {{ project }}{% endblock %}
-
-{% set project_name = project.name %}
+{% block title %}Project - {{ item }}{% endblock %}
 
 {% block content %}
     <ol class="breadcrumb">
         <li><a href="/">Home</a></li>
-        <li><a href="/p/{{ project.load_parent().path }}">{{ project.load_parent().path }}</a></li>
-        <li>{{ project.path }}</li>
+        <li><a href="/p/{{ item.load_parent().path }}">{{ item.load_parent().path }}</a></li>
+        <li>{{ item }}</li>
     </ol>
     <hr>
     <div class="row marketing">
@@ -16,31 +14,20 @@
             <tr>
                 <th>Function</th>
                 <th>Status</th>
-                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            {% for child in project %}
+            {% for child in item %}
                 <tr>
                     <td><a href="/{{ 'func' if child.type == itemType.Function else 'p' }}/{{ child.path }}">{{ child }}</a></td>
                     {% if child.type == itemType.Function %}
                         {% if lockStatus(child) %}
-                            <td>
-                                <span class="label label-danger">Runing</span>
-                            </td>
-                            <td>
-                                <a href="/task/stop/{{ child.path }}" class="btn btn-danger btn-sm">Sop</a>
-                            </td>
+                            <td><span class="label label-danger">Runing</span></td>
                         {% else %}
-                            <td>
-                                <span class="label label-success">Free</span>
-                            </td>
-                            <td>
-                                <a href="/task/run/{{ child.path }}" class="btn btn-sm btn-success">Run</a>
-                            </td>
+                            <td><span class="label label-success">Free</span></td>
                         {% endif %}
                     {% else %}
-                        <td></td><td></td>
+                        <td></td>
                     {% endif %}
                 </tr>
             {% endfor %}

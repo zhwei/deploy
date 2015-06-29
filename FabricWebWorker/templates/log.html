@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}{{ item.path }} - Log{% endblock %}
+{% block header %}
+    <style>
+        #args {
+            width: 60%;
+        }
+        #log {
+            min-height: 460px;
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <ol class="breadcrumb">
         <li><a href="/">Home</a></li>
@@ -8,15 +18,20 @@
     </ol>
     <hr/>
     <div class="row marketing">
-        <pre class="pre-scrollable" id="log" style="min-height: 460px;"></pre>
+        <pre class="pre-scrollable" id="log"></pre>
+        <form class="form-inline" action="/task/run/{{ item.path }}">
         <p>
-            <a class="btn btn-default" href="/func/{{ item.path }}?raw=true">New Tab</a>
+            <label for="args">Args:</label>
+            <input type="text" class="form-control" name="args" id="args"/>
             {% if lockStatus(item) %}
                 <a class="btn btn-danger" href="/task/stop/{{ item.path }}">Stop</a>
             {% else %}
-                <a class="btn btn-success" href="/task/run/{{ item.path }}">Start</a>
+                <input type="submit" class="btn btn-success" value="Start">
             {% endif %}
+            <a class="btn btn-link" href="/func/{{ item.path }}?raw=true">New Tab</a>
+            <a class="btn btn-link" href="/task/clear/{{ item.path }}">Clear</a>
         </p>
+        </form>
     </div>
 {% endblock %}
 
